@@ -16,7 +16,7 @@ class PostsController
 end
 ```
 
-It is *not* meant to be a natural language date parser like the [https://github.com/mojombo/chronic](chronic gem).
+It is *not* meant to be a natural language date parser like the [chronic gem](https://github.com/mojombo/chronic).
 
 Tested with all common Rubies, 1.9.3 .. 2.2, JRuby (1.9 mode). For details check .travis.yml
 
