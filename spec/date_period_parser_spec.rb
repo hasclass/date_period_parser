@@ -102,6 +102,9 @@ describe DatePeriodParser do
   it 'wtd' do
   end
 
+  it 'qtd' do
+  end
+
   it 'current-month' do
     t = Date.today
     last = t >> 1 # same day, next month

@@ -5,48 +5,97 @@ require 'date'
 module DatePeriodParser
   DEFAULT_OFFSET = "+00:00".freeze
 
-  # ## Useage
+  # Returns array of start and end DateTime of given period string.
   #
-  #     from,until = DatePeriodParser.parse("2014")
-  #     from # => #<DateTime 2014-01-01T00:00:00.000+0000")
-  #     until   # => #<DateTime 2014-12-31T23:59:59.999+0000")
+  # @example Basic useage
+  #     DatePeriodParser.parse("2014")
+  #     # => [
+  #     #   #<DateTime 2014-01-01T00:00:00.000+0000">,
+  #     #   #<DateTime 2014-12-31T23:59:59.999+0000">
+  #     # ]
   #
-  #     # offsets:
+  # @example with timezone offsets:
   #     from,until = DatePeriodParser.parse("2014", offset: "+0700")
-  #     from # => #<DateTime 2014-01-01T00:00:00.000+0700")
-  #     until   # => #<DateTime 2014-12-31T23:59:59.999+0700")
+  #     from    # => #<DateTime 2014-01-01T00:00:00.000+0700">
+  #     until   # => #<DateTime 2014-12-31T23:59:59.999+0700">
   #
-  #     # invalid periods
+  # @example invalid periods
   #     DatePeriodParser.parse("123213") # => nil
   #     from,until = DatePeriodParser.parse("123213")
-  #     from # => nil
-  #     until # => nil
+  #     from    # => nil
+  #     until   # => nil
   #
+  # @param  [String] period date period string.
+  # @option options [String] :offset ("+0000") timezone offset, e.g. "+0700"
+  # @return [Array<DateTime, DateTime>] start and end DateTime
+  # @return [nil] if period string is invalid
   #
-  #
-  def parse(str, options = {})
-    parse!(str, options)
+  def parse(period, options = {})
+    parse!(period, options)
   rescue ArgumentError => e
     nil
   end
 
-  def parse!(str, options = {})
-    Base.new(str, options).parse
+  # Same as #parse but raises an ArgumentError if period string is invalid
+  #
+  # @example Basic useage
+  #     def my_method
+  #       from,until = DatePeriodParser.parse!("FOOBAR")
+  #     rescue ArgumentError => e
+  #        # do something
+  #     end
+  #
+  # @see #parse
+  # @param  [String] period date period string.
+  # @raise [ArgumentError] if period string is invalid
+  # @option options [String] :offset ("+0000") timezone offset, e.g. "+0700"
+  # @return [Array<DateTime, DateTime>] start and end DateTime
+  #
+  def parse!(period, options = {})
+    Base.new(period, options).parse
   end
 
-  def range(str, options = {})
-    range!(str, options)
+  # Same as #parse but returns a range instead
+  #
+  # @example Basic useage
+  #     rng = DatePeriodParser.range("2014")
+  #     rng.member? DateTime.new(2014,8,6)
+  #
+  # @see #parse
+  # @param  [String] period date period string.
+  # @raise [ArgumentError] if period string is invalid
+  # @option options [String] :offset ("+0000") timezone offset, e.g. "+0700"
+  # @return [Range<DateTime, DateTime>] start and end DateTime as range
+  #
+  def range(period, options = {})
+    range!(period, options)
   rescue ArgumentError => e
     nil
   end
 
-  def range!(str, options = {})
-    first,last = Base.new(str, offset).parse
+  # Same as #range but raises an ArgumentError if period string is invalid
+  #
+  # @example Basic useage
+  #     def my_method
+  #       rng = DatePeriodParser.range!("FOOBAR")
+  #     rescue ArgumentError => e
+  #        # do something
+  #     end
+  #
+  # @see #parse
+  # @param  [String] period date period string.
+  # @raise [ArgumentError] if period string is invalid
+  # @option options [String] :offset ("+0000") timezone offset, e.g. "+0700"
+  # @return [Range<DateTime, DateTime>] start and end DateTime as range
+  #
+  def range!(period, options = {})
+    first,last = Base.new(period, offset).parse
     first..last
   end
 
   module_function :parse, :parse!, :range, :range!
 
+  # @api private
   class Base
     attr_reader :value, :offset
 
