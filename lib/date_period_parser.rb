@@ -101,7 +101,7 @@ module DatePeriodParser
 
     def initialize(value, options = nil)
       options ||= {} # in case someone sends Base.new("", nil)
-      @value    = value.freeze
+      @value    = value.to_s.freeze
       @offset = (options[:offset] || options['offset'] || DEFAULT_OFFSET).freeze
     end
 

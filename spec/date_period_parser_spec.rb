@@ -8,6 +8,7 @@ describe DatePeriodParser do
   end
 
   it 'parse' do
+    assert parse(:today) != nil
     assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0000"),  parse("2014").first
     assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0000"),  parse("2014", nil).first
     assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0000"),  parse("2014", {}).first
