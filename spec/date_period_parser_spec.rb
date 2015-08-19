@@ -109,7 +109,36 @@ describe DatePeriodParser do
 
   it "quarter_of" do
     # private methods
-    # from,to = DatePeriodParser::Base.new("foobar").send(:quarter_of, 2015, 1)
+    from,to = DatePeriodParser::Base.new("foobar").send(:quarter_of, 2015, 1)
+    assert_equal DateTime.new(2015, 1, 1,  0, 0,  0,     "+0000"), from
+    assert_equal DateTime.new(2015, 3,31, 23,59, 59.999, "+0000"), to
+    from,to = DatePeriodParser::Base.new("foobar").send(:quarter_of, 2015, 2)
+    assert_equal DateTime.new(2015, 1, 1,  0, 0,  0,     "+0000"), from
+    assert_equal DateTime.new(2015, 3,31, 23,59, 59.999, "+0000"), to
+    from,to = DatePeriodParser::Base.new("foobar").send(:quarter_of, 2015, 3)
+    assert_equal DateTime.new(2015, 1, 1,  0, 0,  0,     "+0000"), from
+    assert_equal DateTime.new(2015, 3,31, 23,59, 59.999, "+0000"), to
+
+    from,to = DatePeriodParser::Base.new("foobar").send(:quarter_of, 2015, 4)
+    assert_equal DateTime.new(2015, 4, 1,  0, 0,  0,     "+0000"), from
+    assert_equal DateTime.new(2015, 6,30, 23,59, 59.999, "+0000"), to
+    from,to = DatePeriodParser::Base.new("foobar").send(:quarter_of, 2015, 6)
+    assert_equal DateTime.new(2015, 4, 1,  0, 0,  0,     "+0000"), from
+    assert_equal DateTime.new(2015, 6,30, 23,59, 59.999, "+0000"), to
+
+    from,to = DatePeriodParser::Base.new("foobar").send(:quarter_of, 2015, 7)
+    assert_equal DateTime.new(2015, 7, 1,  0, 0,  0,     "+0000"), from
+    assert_equal DateTime.new(2015, 9,30, 23,59, 59.999, "+0000"), to
+    from,to = DatePeriodParser::Base.new("foobar").send(:quarter_of, 2015, 9)
+    assert_equal DateTime.new(2015, 7, 1,  0, 0,  0,     "+0000"), from
+    assert_equal DateTime.new(2015, 9,30, 23,59, 59.999, "+0000"), to
+
+    from,to = DatePeriodParser::Base.new("foobar").send(:quarter_of, 2015, 10)
+    assert_equal DateTime.new(2015, 10, 1,  0, 0,  0,     "+0000"), from
+    assert_equal DateTime.new(2015, 12,31, 23,59, 59.999, "+0000"), to
+    from,to = DatePeriodParser::Base.new("foobar").send(:quarter_of, 2015, 12)
+    assert_equal DateTime.new(2015, 10, 1,  0, 0,  0,     "+0000"), from
+    assert_equal DateTime.new(2015, 12,31, 23,59, 59.999, "+0000"), to
   end
 
   it 'qtd' do
