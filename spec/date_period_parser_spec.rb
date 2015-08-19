@@ -3,8 +3,18 @@ require "minitest/autorun"
 require 'date_period_parser'
 
 describe DatePeriodParser do
-  def parse(str, offset = nil)
-    DatePeriodParser.parse(str, offset)
+  def parse(str, opts = {})
+    DatePeriodParser.parse(str, opts)
+  end
+
+  it 'parse' do
+    assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0000"),  parse("2014").first
+    assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0000"),  parse("2014", nil).first
+    assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0000"),  parse("2014", {}).first
+    assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0000"),  parse("2014", {offset: nil}).first
+    assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0000"),  parse("2014", {'offset' => nil}).first
+    assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0700"),  parse("2014", {offset: "+0700"}).first
+    assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0700"),  parse("2014", {'offset' => "+0700"}).first
   end
 
   it '2014' do
@@ -108,24 +118,24 @@ describe DatePeriodParser do
 
   describe "with offsets" do
     it '2014' do
-      assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0700"),  parse("2014", "+0700").first
-      assert_equal DateTime.new(2014,12,31, 23, 59, 59.999, "+0700"),  parse("2014", "+0700").last
+      assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0700"),  parse("2014", offset: "+0700").first
+      assert_equal DateTime.new(2014,12,31, 23, 59, 59.999, "+0700"),  parse("2014", offset: "+0700").last
     end
 
     it '2014-01' do
-      assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0700"),  parse("2014-01", "+7").first
-      assert_equal DateTime.new(2014, 1,31, 23, 59, 59.999, "+0700"),  parse("2014-01", "+7").last
+      assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0700"),  parse("2014-01", offset: "+7").first
+      assert_equal DateTime.new(2014, 1,31, 23, 59, 59.999, "+0700"),  parse("2014-01", offset: "+7").last
     end
 
     it '2014-01-01' do
-      assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0700"),  parse("2014-01-01", "+7").first
-      assert_equal DateTime.new(2014, 1, 1, 23, 59, 59.999, "+0700"),  parse("2014-01-01", "+7").last
+      assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0700"),  parse("2014-01-01", offset: "+7").first
+      assert_equal DateTime.new(2014, 1, 1, 23, 59, 59.999, "+0700"),  parse("2014-01-01", offset: "+7").last
     end
 
     it 'today' do
       t = Date.today
-      assert_equal DateTime.new(t.year, t.month, t.day,  0,  0,  0.000, "+0700"),  parse("today", "+7").first
-      assert_equal DateTime.new(t.year, t.month, t.day, 23, 59, 59.999, "+0700"),  parse("today", "+7").last
+      assert_equal DateTime.new(t.year, t.month, t.day,  0,  0,  0.000, "+0700"),  parse("today", offset: "+7").first
+      assert_equal DateTime.new(t.year, t.month, t.day, 23, 59, 59.999, "+0700"),  parse("today", offset: "+7").last
     end
   end
 
@@ -147,7 +157,7 @@ describe DatePeriodParser do
       assert_equal DateTime.parse("2014-01-01T00:00:00.000+0000"),  DatePeriodParser.parse!("2014-12-41").first
     end
     assert_raises(ArgumentError) do
-      assert_equal DateTime.parse("2014-01-01T00:00:00.000+0000"),  DatePeriodParser.parse!("2014-12-41", "+2400").first
+      assert_equal DateTime.parse("2014-01-01T00:00:00.000+0000"),  DatePeriodParser.parse!("2014-12-41", offset: "+2400").first
     end
   end
 end

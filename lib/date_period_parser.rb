@@ -12,7 +12,7 @@ module DatePeriodParser
   #     until   # => #<DateTime 2014-12-31T23:59:59.999+0000")
   #
   #     # offsets:
-  #     from,until = DatePeriodParser.parse("2014", "+0700")
+  #     from,until = DatePeriodParser.parse("2014", offset: "+0700")
   #     from # => #<DateTime 2014-01-01T00:00:00.000+0700")
   #     until   # => #<DateTime 2014-12-31T23:59:59.999+0700")
   #
@@ -24,23 +24,23 @@ module DatePeriodParser
   #
   #
   #
-  def parse(str, offset = nil)
-    parse!(str, offset)
+  def parse(str, options = {})
+    parse!(str, options)
   rescue ArgumentError => e
     nil
   end
 
-  def parse!(str, offset = nil)
-    Base.new(str, offset).parse
+  def parse!(str, options = {})
+    Base.new(str, options).parse
   end
 
-  def range(str, offset = nil)
-    range!(str, offset)
+  def range(str, options = {})
+    range!(str, options)
   rescue ArgumentError => e
     nil
   end
 
-  def range!
+  def range!(str, options = {})
     first,last = Base.new(str, offset).parse
     first..last
   end
@@ -50,9 +50,10 @@ module DatePeriodParser
   class Base
     attr_reader :value, :offset
 
-    def initialize(value, offset = nil)
-      @value  = value.freeze
-      @offset = (offset || DEFAULT_OFFSET).freeze
+    def initialize(value, options = nil)
+      options ||= {} # in case someone sends Base.new("", nil)
+      @value    = value.freeze
+      @offset = (options[:offset] || options['offset'] || DEFAULT_OFFSET).freeze
     end
 
     def parse

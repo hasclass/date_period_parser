@@ -13,6 +13,8 @@ class PostsController
   # GET /posts?period=2015-08
   def index
     date_range = DatePeriodParser.range(params["period"])
+    # with user specific timezones
+    # date_range = DatePeriodParser.range(params["period"], offset: current_user.timezone)
     date_range ||= DatePeriodParser.range("current-month") # default
     @posts = Posts.where(created_at: date_range)
   end
@@ -42,7 +44,7 @@ DatePeriodParse.parse("today")
 #=> [<#DateTime 2015-08-31T00:00:00.000Z>, <#DateTime 2014-08-31T23:59:59.999Z>]
 
 # timezone offsets
-DatePeriodParse.parse("2014-12-31", "+0700")
+DatePeriodParse.parse("2014-12-31", offset: "+0700")
 #=> [<#DateTime 2014-12-31T00:00:00.000+0700>, <#DateTime 2014-12-31T23:59:59.999+0700>]
 ```
 
@@ -81,7 +83,7 @@ from # => #<DateTime 2014-01-01T00:00:00.000+0000")
 until   # => #<DateTime 2014-12-31T23:59:59.999+0000")
 
 # offsets:
-from,until = DatePeriodParser.parse("2014", "+0700")
+from,until = DatePeriodParser.parse("2014", offset: "+0700")
 from # => #<DateTime 2014-01-01T00:00:00.000+0700")
 until   # => #<DateTime 2014-12-31T23:59:59.999+0700")
 
