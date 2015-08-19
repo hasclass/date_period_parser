@@ -13,7 +13,7 @@ class PostsController
   # GET /posts?period=2015-08
   def index
     date_range = DatePeriodParser.range(params["period"])
-    date_range ||= DatePeriodParser.range("today") # default
+    date_range ||= DatePeriodParser.range("current-month") # default
     @posts = Posts.where(created_at: date_range)
   end
 end
@@ -66,10 +66,10 @@ Or install it yourself as:
 
 See examples above. Currently supported are:
 
-* years  "2014"
-* months "2014-01"
-* dates  "2014-01-01"
-* shorcuts "today", "yesterday" and "yday"
+* years  `YYYY`
+* months `YYYY-MM`
+* dates  `YYYY-MM-DD`
+* shorcuts `today`, `yesterday` and `yday`, `current-month`, `previous-month`, `current-year`, `previous-year`
 
 It currently requires the year to have 4 digits.
 

@@ -60,6 +60,10 @@ module DatePeriodParser
       when /\Atoday\Z/                then parse_date(Date.today)
       when /\Ayesterday\Z/            then parse_date(Date.today - 1)
       when /\Ayday\Z/                 then parse_date(Date.today - 1)
+      when /\Acurrent-month\Z/        then parse_month(Date.today)
+      when /\Aprevious-month\Z/       then parse_month(Date.today << 1)
+      when /\Acurrent-year\Z/        then parse_year(Date.today)
+      when /\Aprevious-year\Z/       then parse_year(Date.today << 12)
       when /\A\d\d\d\d\Z/             then parse_year
       when /\A\d\d\d\d\-\d\d\Z/       then parse_month
       when /\A\d\d\d\d\-\d\d\-\d\d\Z/ then parse_date
@@ -84,20 +88,28 @@ module DatePeriodParser
       ]
     end
 
-    def parse_month
-      year, month = @value.split("-")
+    def parse_month(date = nil)
+      if date.nil?
+        year, month = @value.split("-").map(&:to_i)
+      else
+        year, month = date.year, date.month
+      end
 
-      first = DateTime.new(year.to_i, month.to_i, 1, 0, 0, 0, offset)
+      first = DateTime.new(year, month, 1, 0, 0, 0, offset)
       [
         first,
         last_date_time_of_month(first)
       ]
     end
 
-    def parse_year
-      year = @value
+    def parse_year(date = nil)
+      if date.nil?
+        year = @value.to_i
+      else
+        year = date.year
+      end
 
-      first = DateTime.new(year.to_i, 1,1,0,0,0,offset)
+      first = DateTime.new(year, 1,1,0,0,0,offset)
       [
         first,
         last_date_time_of_month(first >> 11)

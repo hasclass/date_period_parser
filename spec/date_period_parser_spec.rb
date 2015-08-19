@@ -70,16 +70,40 @@ describe DatePeriodParser do
     assert_equal DateTime.new(t.year, t.month, t.day,23,59,59.999, "+0000"),  parse("yday").last
   end
 
+
+  it 'ytd' do
+  end
+  it 'mtd' do
+  end
+  it 'wtd' do
+  end
+
   it 'current-month' do
+    t = Date.today
+    last = t >> 1 # same day, next month
+    last = Date.new(last.year, last.month, 1) - 1
+    assert_equal DateTime.new(t.year, t.month, 1, 0, 0, 0.000, "+0000"),        parse("current-month").first
+    assert_equal DateTime.new(t.year, t.month, last.day,23,59,59.999, "+0000"), parse("current-month").last
   end
 
   it 'previous-month' do
+    t = Date.today << 1
+    last = t >> 1 # same day, next month
+    last = Date.new(last.year, last.month, 1) - 1
+    assert_equal DateTime.new(t.year, t.month, 1, 0, 0, 0.000, "+0000"),        parse("previous-month").first
+    assert_equal DateTime.new(t.year, t.month, last.day,23,59,59.999, "+0000"), parse("previous-month").last
   end
 
   it 'current-year' do
+    t = Date.today
+    assert_equal DateTime.new(t.year,  1,  1, 0, 0, 0.000, "+0000"), parse("current-year").first
+    assert_equal DateTime.new(t.year, 12, 31,23,59,59.999, "+0000"), parse("current-year").last
   end
 
   it 'previous-year' do
+    t = Date.today << 12
+    assert_equal DateTime.new(t.year,  1,  1, 0, 0, 0.000, "+0000"), parse("previous-year").first
+    assert_equal DateTime.new(t.year, 12, 31,23,59,59.999, "+0000"), parse("previous-year").last
   end
 
   describe "with offsets" do
