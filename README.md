@@ -1,3 +1,5 @@
+![build](https://travis-ci.org/hasclass/date_period_parser.svg?branch=master)
+
 # DatePeriodParser
 
 Parse a date-like string and returns it's start and end DateTime.
@@ -15,6 +17,8 @@ end
 ```
 
 It is *not* meant to be a natural language date parser like the [https://github.com/mojombo/chronic](chronic gem).
+
+Tested with all common Rubies, 1.9.3 .. 2.2, JRuby (1.9 mode). For details check .travis.yml
 
 ## Examples
 
