@@ -115,7 +115,7 @@ from  ||= DateTime.yesterday
 until ||= DateTime.now
 
 # parse! raises ArgumentError for invalid periods
-from,until = DatePeriodParser.parse("123213")
+from,until = DatePeriodParser.parse!("123213")
 #=> ArgumentError
 ```
 
@@ -132,7 +132,7 @@ rng = DatePeriodParser.range("dsf89sfd")
 # => nil
 
 # range! raises ArgumentError for invalid periods
-rng = DatePeriodParser.range("dsf89sfd")
+rng = DatePeriodParser.range!("dsf89sfd")
 #=> ArgumentError
 ```
 
