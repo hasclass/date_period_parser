@@ -5,11 +5,47 @@ require 'date'
 module DatePeriodParser
   DEFAULT_OFFSET = "+00:00".freeze
 
+  # ## Useage
+  #
+  #     from,until = DatePeriodParser.parse("2014")
+  #     from # => #<DateTime 2014-01-01T00:00:00.000+0000")
+  #     until   # => #<DateTime 2014-12-31T23:59:59.999+0000")
+  #
+  #     # offsets:
+  #     from,until = DatePeriodParser.parse("2014", "+0700")
+  #     from # => #<DateTime 2014-01-01T00:00:00.000+0700")
+  #     until   # => #<DateTime 2014-12-31T23:59:59.999+0700")
+  #
+  #     # invalid periods
+  #     DatePeriodParser.parse("123213") # => nil
+  #     from,until = DatePeriodParser.parse("123213")
+  #     from # => nil
+  #     until # => nil
+  #
+  #
+  #
   def parse(str, offset = nil)
+    parse!(str, offset)
+  rescue ArgumentError => e
+    nil
+  end
+
+  def parse!(str, offset = nil)
     Base.new(str, offset).parse
   end
 
-  module_function :parse
+  def range(str, offset = nil)
+    range!(str, offset)
+  rescue ArgumentError => e
+    nil
+  end
+
+  def range!
+    first,last = Base.new(str, offset).parse
+    first..last
+  end
+
+  module_function :parse, :parse!, :range, :range!
 
   class Base
     attr_reader :value, :offset
@@ -25,7 +61,7 @@ module DatePeriodParser
       when /\A\d\d\d\d\Z/             then parse_year
       when /\A\d\d\d\d\-\d\d\Z/       then parse_month
       when /\A\d\d\d\d\-\d\d\-\d\d\Z/ then parse_date
-      else [nil, nil]
+      else raise ArgumentError.new("invalid date period")
       end
     end
 

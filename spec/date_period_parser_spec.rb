@@ -75,19 +75,22 @@ describe DatePeriodParser do
   end
 
   it 'invalid pattern 2014-01-01-01' do
-    assert_equal nil,  parse("2014-01-01-01").first
-    assert_equal nil,  parse("2014-01-01-01").last
+    from, to = parse("2014-01-01-01")
+    assert_equal nil,  from
+    assert_equal nil,  to
+    # it is actually nil and not [nil, nil]
+    assert_equal nil,  parse("2014-01-01-01")
   end
 
   it 'invalid date 2014-13-01' do
     assert_raises(ArgumentError) do
-      assert_equal DateTime.parse("2014-01-01T00:00:00.000+0000"),  parse("2014-13-01").first
+      assert_equal DateTime.parse("2014-01-01T00:00:00.000+0000"),  DatePeriodParser.parse!("2014-13-01").first
     end
     assert_raises(ArgumentError) do
-      assert_equal DateTime.parse("2014-01-01T00:00:00.000+0000"),  parse("2014-12-41").first
+      assert_equal DateTime.parse("2014-01-01T00:00:00.000+0000"),  DatePeriodParser.parse!("2014-12-41").first
     end
     assert_raises(ArgumentError) do
-      assert_equal DateTime.parse("2014-01-01T00:00:00.000+0000"),  parse("2014-12-41", "+2400").first
+      assert_equal DateTime.parse("2014-01-01T00:00:00.000+0000"),  DatePeriodParser.parse!("2014-12-41", "+2400").first
     end
   end
 end
