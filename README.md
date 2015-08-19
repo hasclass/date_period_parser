@@ -19,7 +19,7 @@ class PostsController
 end
 ```
 
-It is *not* meant to be a natural language date parser like the [chronic gem](https://github.com/mojombo/chronic).
+It is **not** a natural language date parser like the [chronic gem](https://github.com/mojombo/chronic).
 
 Tested with all common Rubies, 1.9.3 .. 2.2, JRuby (1.9 mode). For details check .travis.yml
 
@@ -69,7 +69,7 @@ See examples above. Currently supported are:
 * years  "2014"
 * months "2014-01"
 * dates  "2014-01-01"
-* shorcuts "today"
+* shorcuts "today", "yesterday" and "yday"
 
 It currently requires the year to have 4 digits.
 

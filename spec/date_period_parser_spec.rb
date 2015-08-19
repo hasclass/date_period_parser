@@ -51,6 +51,37 @@ describe DatePeriodParser do
     assert_equal DateTime.new(t.year, t.month, t.day,23,59,59.999, "+0000"),  parse("today").last
   end
 
+  # https://en.wikipedia.org/wiki/ISO_8601#Week_dates
+  it '2015-W01' do
+  end
+
+  it '2015-Q1' do
+  end
+
+  it 'yesterday' do
+    t = Date.today - 1
+    assert_equal DateTime.new(t.year, t.month, t.day, 0, 0, 0.000, "+0000"),  parse("yesterday").first
+    assert_equal DateTime.new(t.year, t.month, t.day,23,59,59.999, "+0000"),  parse("yesterday").last
+  end
+
+  it 'yday' do
+    t = Date.today - 1
+    assert_equal DateTime.new(t.year, t.month, t.day, 0, 0, 0.000, "+0000"),  parse("yday").first
+    assert_equal DateTime.new(t.year, t.month, t.day,23,59,59.999, "+0000"),  parse("yday").last
+  end
+
+  it 'current-month' do
+  end
+
+  it 'previous-month' do
+  end
+
+  it 'current-year' do
+  end
+
+  it 'previous-year' do
+  end
+
   describe "with offsets" do
     it '2014' do
       assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0700"),  parse("2014", "+0700").first
@@ -73,6 +104,8 @@ describe DatePeriodParser do
       assert_equal DateTime.new(t.year, t.month, t.day, 23, 59, 59.999, "+0700"),  parse("today", "+7").last
     end
   end
+
+
 
   it 'invalid pattern 2014-01-01-01' do
     from, to = parse("2014-01-01-01")

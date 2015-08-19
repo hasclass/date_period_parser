@@ -58,6 +58,8 @@ module DatePeriodParser
     def parse
       case @value
       when /\Atoday\Z/                then parse_date(Date.today)
+      when /\Ayesterday\Z/            then parse_date(Date.today - 1)
+      when /\Ayday\Z/                 then parse_date(Date.today - 1)
       when /\A\d\d\d\d\Z/             then parse_year
       when /\A\d\d\d\d\-\d\d\Z/       then parse_month
       when /\A\d\d\d\d\-\d\d\-\d\d\Z/ then parse_date
