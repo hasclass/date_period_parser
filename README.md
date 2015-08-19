@@ -7,10 +7,13 @@ Parse a date-like string and returns it's start and end DateTime.
 This can be used to pass date-periods for URL parameters or query strings, e.g. filtering records in a given period.
 
 ```ruby
+# Example useage in a rails controller
+
 class PostsController
   # GET /posts?period=2015-08
   def index
     date_range = DatePeriodParser.range(params["period"])
+    date_range ||= DatePeriodParser.range("today") # default
     @posts = Posts.where(created_at: date_range)
   end
 end
