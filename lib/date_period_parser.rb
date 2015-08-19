@@ -107,20 +107,20 @@ module DatePeriodParser
 
     def parse
       case @value
-      when /\Atoday\Z/                then parse_date(Date.today)
-      when /\Ayesterday\Z/            then parse_date(Date.today - 1)
-      when /\Ayday\Z/                 then parse_date(Date.today - 1)
-      when /\Acurrent-month\Z/        then parse_month(Date.today)
-      when /\Aprevious-month\Z/       then parse_month(Date.today << 1)
-      when /\Acurrent-year\Z/         then parse_year(Date.today)
-      when /\Aprevious-year\Z/        then parse_year(Date.today << 12)
-      when /\Amtd\Z/                  then mtd
-      when /\Aqtd\Z/                  then quarter_of(Date.today.year, Date.today.month)
-      when /\Aytd\Z/                  then ytd
-      when /\A\d\d\d\d\-Q\d\Z/         then parse_quarter
-      when /\A\d\d\d\d\Z/             then parse_year
-      when /\A\d\d\d\d\-\d\d\Z/       then parse_month
-      when /\A\d\d\d\d\-\d\d\-\d\d\Z/ then parse_date
+      when /\Atoday\Z/i                then parse_date(Date.today)
+      when /\Ayesterday\Z/i            then parse_date(Date.today - 1)
+      when /\Ayday\Z/i                 then parse_date(Date.today - 1)
+      when /\Acurrent-month\Z/i        then parse_month(Date.today)
+      when /\Aprevious-month\Z/i       then parse_month(Date.today << 1)
+      when /\Acurrent-year\Z/i         then parse_year(Date.today)
+      when /\Aprevious-year\Z/i        then parse_year(Date.today << 12)
+      when /\Amtd\Z/i                  then mtd
+      when /\Aqtd\Z/i                  then quarter_of(Date.today.year, Date.today.month)
+      when /\Aytd\Z/i                  then ytd
+      when /\A\d\d\d\d\-Q\d\Z/i        then parse_quarter
+      when /\A\d\d\d\d\Z/i             then parse_year
+      when /\A\d\d\d\d\-\d\d\Z/i       then parse_month
+      when /\A\d\d\d\d\-\d\d\-\d\d\Z/i then parse_date
       else raise ArgumentError.new("invalid date period")
       end
     end
@@ -188,7 +188,7 @@ module DatePeriodParser
     end
 
     def parse_quarter
-      year, quarter = @value.split("-Q").map(&:to_i)
+      year, quarter = @value.upcase.split("-Q").map(&:to_i)
 
       quarter_of(year, (quarter - 1) * 3 + 1)
     end

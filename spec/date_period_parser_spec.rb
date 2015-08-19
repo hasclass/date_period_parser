@@ -58,7 +58,7 @@ describe DatePeriodParser do
   it 'today' do
     t = Date.today
     assert_equal DateTime.new(t.year, t.month, t.day, 0, 0, 0.000, "+0000"),  parse("today").first
-    assert_equal DateTime.new(t.year, t.month, t.day,23,59,59.999, "+0000"),  parse("today").last
+    assert_equal DateTime.new(t.year, t.month, t.day,23,59,59.999, "+0000"),  parse("today".upcase).last
   end
 
   # https://en.wikipedia.org/wiki/ISO_8601#Week_dates
@@ -66,7 +66,7 @@ describe DatePeriodParser do
   end
 
   it '2015-Q1' do
-    assert_equal DateTime.new(2015, 1, 1,  0,  0,  0.000, "+0000"),  parse("2015-Q1").first
+    assert_equal DateTime.new(2015, 1, 1,  0,  0,  0.000, "+0000"),  parse("2015-q1").first
     assert_equal DateTime.new(2015, 3,31, 23, 59, 59.999, "+0000"),  parse("2015-Q1").last
 
     assert_equal DateTime.new(2015, 1, 1,  0,  0,  0.000, "-0300"),  parse("2015-Q1", offset: "-0300").first
@@ -76,20 +76,20 @@ describe DatePeriodParser do
   it 'yesterday' do
     t = Date.today - 1
     assert_equal DateTime.new(t.year, t.month, t.day, 0, 0, 0.000, "+0000"),  parse("yesterday").first
-    assert_equal DateTime.new(t.year, t.month, t.day,23,59,59.999, "+0000"),  parse("yesterday").last
+    assert_equal DateTime.new(t.year, t.month, t.day,23,59,59.999, "+0000"),  parse("yesterday".upcase).last
   end
 
   it 'yday' do
     t = Date.today - 1
     assert_equal DateTime.new(t.year, t.month, t.day, 0, 0, 0.000, "+0000"),  parse("yday").first
-    assert_equal DateTime.new(t.year, t.month, t.day,23,59,59.999, "+0000"),  parse("yday").last
+    assert_equal DateTime.new(t.year, t.month, t.day,23,59,59.999, "+0000"),  parse("yday".upcase).last
   end
 
 
   it 'ytd' do
     t = DateTime.now
     assert_equal DateTime.new(t.year, 1, 1, 0, 0, 0.000, "+0000"),                        parse("ytd").first
-    assert_equal DateTime.new(t.year, t.month, t.day, t.hour,t.minute,t.second, "+0000"), parse("ytd").last
+    assert_equal DateTime.new(t.year, t.month, t.day, t.hour,t.minute,t.second, "+0000"), parse("ytd".upcase).last
 
     assert_equal DateTime.new(t.year, 1, 1, 0, 0, 0.000, "+0400"),                        parse("ytd", offset: "+0400").first
     assert_equal DateTime.new(t.year, t.month, t.day, t.hour,t.minute,t.second, "+0400"), parse("ytd", offset: "+0400").last
@@ -98,7 +98,7 @@ describe DatePeriodParser do
   it 'mtd' do
     t = DateTime.now
     assert_equal DateTime.new(t.year, t.month, 1, 0, 0, 0.000, "+0000"),                  parse("mtd").first
-    assert_equal DateTime.new(t.year, t.month, t.day, t.hour,t.minute,t.second, "+0000"), parse("mtd").last
+    assert_equal DateTime.new(t.year, t.month, t.day, t.hour,t.minute,t.second, "+0000"), parse("mtd".upcase).last
 
     assert_equal DateTime.new(t.year, t.month, 1, 0, 0, 0.000, "+0400"),                  parse("mtd", offset: "+0400").first
     assert_equal DateTime.new(t.year, t.month, t.day, t.hour,t.minute,t.second, "+0400"), parse("mtd", offset: "+0400").last
@@ -146,9 +146,9 @@ describe DatePeriodParser do
     from,to = DatePeriodParser::Base.new("foo").send(:quarter_of, t.year, t.month)
 
     assert_equal DateTime.new(from.year, from.month, 1, 0, 0, 0.000, "+0000"),                  parse("qtd").first
-    assert_equal DateTime.new(to.year, to.month, to.day, to.hour,to.minute,to.second+0.999, "+0000"), parse("qtd").last
+    assert_equal DateTime.new(to.year, to.month, to.day, to.hour,to.minute,to.second+0.999, "+0000"), parse("qtd".upcase).last
 
-    assert_equal DateTime.new(from.year, from.month, 1, 0, 0, 0.000, "+0400"),                  parse("qtd", offset: "+0400").first
+    assert_equal DateTime.new(from.year, from.month, 1, 0, 0, 0.000, "+0400"),                        parse("qtd", offset: "+0400").first
     assert_equal DateTime.new(to.year, to.month, to.day, to.hour,to.minute,to.second+0.999, "+0400"), parse("qtd", offset: "+0400").last
   end
 
@@ -157,7 +157,7 @@ describe DatePeriodParser do
     last = t >> 1 # same day, next month
     last = Date.new(last.year, last.month, 1) - 1
     assert_equal DateTime.new(t.year, t.month, 1, 0, 0, 0.000, "+0000"),        parse("current-month").first
-    assert_equal DateTime.new(t.year, t.month, last.day,23,59,59.999, "+0000"), parse("current-month").last
+    assert_equal DateTime.new(t.year, t.month, last.day,23,59,59.999, "+0000"), parse("current-month".upcase).last
   end
 
   it 'previous-month' do
@@ -165,19 +165,19 @@ describe DatePeriodParser do
     last = t >> 1 # same day, next month
     last = Date.new(last.year, last.month, 1) - 1
     assert_equal DateTime.new(t.year, t.month, 1, 0, 0, 0.000, "+0000"),        parse("previous-month").first
-    assert_equal DateTime.new(t.year, t.month, last.day,23,59,59.999, "+0000"), parse("previous-month").last
+    assert_equal DateTime.new(t.year, t.month, last.day,23,59,59.999, "+0000"), parse("previous-month".upcase).last
   end
 
   it 'current-year' do
     t = Date.today
     assert_equal DateTime.new(t.year,  1,  1, 0, 0, 0.000, "+0000"), parse("current-year").first
-    assert_equal DateTime.new(t.year, 12, 31,23,59,59.999, "+0000"), parse("current-year").last
+    assert_equal DateTime.new(t.year, 12, 31,23,59,59.999, "+0000"), parse("current-year".upcase).last
   end
 
   it 'previous-year' do
     t = Date.today << 12
     assert_equal DateTime.new(t.year,  1,  1, 0, 0, 0.000, "+0000"), parse("previous-year").first
-    assert_equal DateTime.new(t.year, 12, 31,23,59,59.999, "+0000"), parse("previous-year").last
+    assert_equal DateTime.new(t.year, 12, 31,23,59,59.999, "+0000"), parse("previous-year".upcase).last
   end
 
   describe "with offsets" do
