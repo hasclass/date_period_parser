@@ -115,7 +115,9 @@ module DatePeriodParser
       when /\Acurrent-year\Z/         then parse_year(Date.today)
       when /\Aprevious-year\Z/        then parse_year(Date.today << 12)
       when /\Amtd\Z/                  then mtd
+      when /\Aqtd\Z/                  then quarter_of(Date.today.year, Date.today.month)
       when /\Aytd\Z/                  then ytd
+      when /\A\d\d\d\d\-Q\d\Z/         then parse_quarter
       when /\A\d\d\d\d\Z/             then parse_year
       when /\A\d\d\d\d\-\d\d\Z/       then parse_month
       when /\A\d\d\d\d\-\d\d\-\d\d\Z/ then parse_date
@@ -124,6 +126,17 @@ module DatePeriodParser
     end
 
   protected
+    def quarter_of(year, month)
+      case month
+      when  1..3  then [start_of_date(Date.new(year,  1)), end_of_date(Date.new(year,  3, 31))]
+      when  4..6  then [start_of_date(Date.new(year,  4)), end_of_date(Date.new(year,  6, 30))]
+      when  7..9  then [start_of_date(Date.new(year,  7)), end_of_date(Date.new(year,  9, 30))]
+      when 10..12 then [start_of_date(Date.new(year, 10)), end_of_date(Date.new(year, 12, 31))]
+      else
+        raise ArgumentError.new("invalid date period")
+      end
+    end
+
     def now_with_offset
       d = DateTime.now
       DateTime.new(d.year, d.month, d.day, d.hour, d.minute, d.second, offset)
@@ -172,6 +185,12 @@ module DatePeriodParser
         first,
         last_date_time_of_month(first)
       ]
+    end
+
+    def parse_quarter
+      year, quarter = @value.split("-Q").map(&:to_i)
+
+      quarter_of(year, (quarter - 1) * 3 + 1)
     end
 
     def parse_year(date = nil)

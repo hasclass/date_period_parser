@@ -66,6 +66,11 @@ describe DatePeriodParser do
   end
 
   it '2015-Q1' do
+    assert_equal DateTime.new(2015, 1, 1,  0,  0,  0.000, "+0000"),  parse("2015-Q1").first
+    assert_equal DateTime.new(2015, 3,31, 23, 59, 59.999, "+0000"),  parse("2015-Q1").last
+
+    assert_equal DateTime.new(2015, 1, 1,  0,  0,  0.000, "-0300"),  parse("2015-Q1", offset: "-0300").first
+    assert_equal DateTime.new(2015, 3,31, 23, 59, 59.999, "-0300"),  parse("2015-Q1", offset: "-0300").last
   end
 
   it 'yesterday' do
@@ -97,12 +102,25 @@ describe DatePeriodParser do
 
     assert_equal DateTime.new(t.year, t.month, 1, 0, 0, 0.000, "+0400"),                  parse("mtd", offset: "+0400").first
     assert_equal DateTime.new(t.year, t.month, t.day, t.hour,t.minute,t.second, "+0400"), parse("mtd", offset: "+0400").last
-    end
+  end
 
   it 'wtd' do
   end
 
+  it "quarter_of" do
+    # private methods
+    # from,to = DatePeriodParser::Base.new("foobar").send(:quarter_of, 2015, 1)
+  end
+
   it 'qtd' do
+    t = Date.today
+    from,to = DatePeriodParser::Base.new("foo").send(:quarter_of, t.year, t.month)
+
+    assert_equal DateTime.new(from.year, from.month, 1, 0, 0, 0.000, "+0000"),                  parse("qtd").first
+    assert_equal DateTime.new(to.year, to.month, to.day, to.hour,to.minute,to.second+0.999, "+0000"), parse("qtd").last
+
+    assert_equal DateTime.new(from.year, from.month, 1, 0, 0, 0.000, "+0400"),                  parse("qtd", offset: "+0400").first
+    assert_equal DateTime.new(to.year, to.month, to.day, to.hour,to.minute,to.second+0.999, "+0400"), parse("qtd", offset: "+0400").last
   end
 
   it 'current-month' do
