@@ -82,9 +82,23 @@ describe DatePeriodParser do
 
 
   it 'ytd' do
+    t = DateTime.now
+    assert_equal DateTime.new(t.year, 1, 1, 0, 0, 0.000, "+0000"),                        parse("ytd").first
+    assert_equal DateTime.new(t.year, t.month, t.day, t.hour,t.minute,t.second, "+0000"), parse("ytd").last
+
+    assert_equal DateTime.new(t.year, 1, 1, 0, 0, 0.000, "+0400"),                        parse("ytd", offset: "+0400").first
+    assert_equal DateTime.new(t.year, t.month, t.day, t.hour,t.minute,t.second, "+0400"), parse("ytd", offset: "+0400").last
   end
+
   it 'mtd' do
-  end
+    t = DateTime.now
+    assert_equal DateTime.new(t.year, t.month, 1, 0, 0, 0.000, "+0000"),                  parse("mtd").first
+    assert_equal DateTime.new(t.year, t.month, t.day, t.hour,t.minute,t.second, "+0000"), parse("mtd").last
+
+    assert_equal DateTime.new(t.year, t.month, 1, 0, 0, 0.000, "+0400"),                  parse("mtd", offset: "+0400").first
+    assert_equal DateTime.new(t.year, t.month, t.day, t.hour,t.minute,t.second, "+0400"), parse("mtd", offset: "+0400").last
+    end
+
   it 'wtd' do
   end
 

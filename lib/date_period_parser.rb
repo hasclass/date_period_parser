@@ -63,8 +63,10 @@ module DatePeriodParser
       when /\Ayday\Z/                 then parse_date(Date.today - 1)
       when /\Acurrent-month\Z/        then parse_month(Date.today)
       when /\Aprevious-month\Z/       then parse_month(Date.today << 1)
-      when /\Acurrent-year\Z/        then parse_year(Date.today)
-      when /\Aprevious-year\Z/       then parse_year(Date.today << 12)
+      when /\Acurrent-year\Z/         then parse_year(Date.today)
+      when /\Aprevious-year\Z/        then parse_year(Date.today << 12)
+      when /\Amtd\Z/                  then mtd
+      when /\Aytd\Z/                  then ytd
       when /\A\d\d\d\d\Z/             then parse_year
       when /\A\d\d\d\d\-\d\d\Z/       then parse_month
       when /\A\d\d\d\d\-\d\d\-\d\d\Z/ then parse_date
@@ -73,6 +75,26 @@ module DatePeriodParser
     end
 
   protected
+    def now_with_offset
+      d = DateTime.now
+      DateTime.new(d.year, d.month, d.day, d.hour, d.minute, d.second, offset)
+    end
+
+    def mtd
+      now = now_with_offset
+      [
+        DateTime.new(now.year, now.month, 1, 0, 0, 0, offset),
+        now
+      ]
+    end
+
+    def ytd
+      now = now_with_offset
+      [
+        DateTime.new(now.year, 1, 1, 0, 0, 0, offset),
+        now
+      ]
+    end
 
     def parse_date(date = nil)
       if date.nil?
@@ -124,6 +146,10 @@ module DatePeriodParser
 
       d = last_day_this_month
       end_of_date(d)
+    end
+
+    def start_of_date(dt)
+      DateTime.new(dt.year, dt.month, dt.day, 0,  0,  0, offset)
     end
 
     def end_of_date(dt)

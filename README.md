@@ -21,7 +21,16 @@ class PostsController
 end
 ```
 
-It is **not** a natural language date parser like the [chronic gem](https://github.com/mojombo/chronic).
+It is **not** a natural language date parser like the [chronic gem](https://github.com/mojombo/chronic). But intends to parse common formats like [ISO_8601](https://en.wikipedia.org/wiki/ISO_8601).
+
+Examples:
+
+* years  `YYYY`
+* months `YYYY-MM`
+* dates  `YYYY-MM-DD`
+* beginning of year/month to now `ytd`, `mtd`
+* shorcuts `today`, `yesterday` and `yday`, `current-month`, `previous-month`, `current-year`, `previous-year`
+
 
 Tested with all common Rubies, 1.9.3 .. 2.2, JRuby (1.9 mode). For details check .travis.yml
 
@@ -64,16 +73,25 @@ Or install it yourself as:
 
     $ gem install date_period_parser
 
-## Usage
+## Recognized patterns
 
-See examples above. Currently supported are:
+Values below for today: 2015-07-14 15:33
 
-* years  `YYYY`
-* months `YYYY-MM`
-* dates  `YYYY-MM-DD`
-* shorcuts `today`, `yesterday` and `yday`, `current-month`, `previous-month`, `current-year`, `previous-year`
+| Pattern            | From             | Until            |
+|--------------------|------------------|------------------|
+| 2015               | 2015-01-01 00:00 | 2015-12-31 23:59 |
+| ytd                | 2015-01-01 00:00 | 2015-07-14 15:33 |
+| current-year       | 2015-01-01 00:00 | 2015-07-31 23:59 |
+| previous-year      | 2014-01-01 00:00 | 2014-12-31 23:59 |
+| 2015-07            | 2015-07-01 00:00 | 2015-07-31 23:59 |
+| mtd                | 2015-07-01 00:00 | 2015-07-14 15:33 |
+| current-month      | 2015-07-01 00:00 | 2015-07-31 23:59 |
+| previous-month     | 2015-06-01 00:00 | 2015-06-30 23:59 |
+| 2015-12-31         | 2015-12-31 00:00 | 2015-12-31 23:59 |
+| today              | 2015-07-14 00:00 | 2015-07-14 23:59 |
+| yesterday          | 2015-07-13 00:00 | 2015-07-13 23:59 |
 
-It currently requires the year to have 4 digits.
+Difference between `ytd` and `current-year` (`mtd` and `current-month` respectively) is that `ytd` will return DateTime.now vs. current-month spans from first to last day of the month.
 
 ### DatePeriodParser.parse
 
