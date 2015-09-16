@@ -4,7 +4,9 @@
 
 Parse a date-period string like 2015-Q1 and returns the start and end DateTime.
 
-Useful for reports to filterin records for a given time period.
+Useful for reporting/pagination/search to filter records for a given time period.
+
+It is **not** a natural language date parser like the [chronic gem](https://github.com/mojombo/chronic). But intends to parse common formats like [ISO_8601](https://en.wikipedia.org/wiki/ISO_8601).
 
 ```ruby
 # Example useage in a rails controller action
@@ -16,9 +18,7 @@ def index
 end
 ```
 
-It is **not** a natural language date parser like the [chronic gem](https://github.com/mojombo/chronic). But intends to parse common formats like [ISO_8601](https://en.wikipedia.org/wiki/ISO_8601).
-
-Examples:
+Examples periods:
 
 * years  `YYYY`
 * months `YYYY-MM`
