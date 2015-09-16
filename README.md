@@ -7,14 +7,12 @@ Parse a date-period string like 2015-Q1 and returns the start and end DateTime.
 Useful for reports to filterin records for a given time period.
 
 ```ruby
-# Example useage in a rails controller
+# Example useage in a rails controller action
 
-class PostsController
-  # GET /posts?period=2015-08
-  def index
-    date_range = DatePeriodParser.range(params["period"], default: "this-month")
-    @posts = Posts.where(created_at: date_range)
-  end
+# GET /posts?period=2015-08
+def index
+  date_range = DatePeriodParser.range(params["period"], default: "today")
+  @posts = Posts.where(created_at: date_range)
 end
 ```
 
