@@ -18,6 +18,13 @@ describe DatePeriodParser do
     assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0700"),  parse("2014", {'offset' => "+0700"}).first
   end
 
+  it 'parse with :default' do
+    assert parse(:today) != nil
+    assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0000"),  parse(nil, default: "2014").first
+    assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0000"),  parse("", default: "2014").first
+    assert_equal nil,  parse("Invalid20", default: "2014")
+  end
+
   it '2014' do
     assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0000"),  parse("2014").first
     assert_equal DateTime.new(2014,12,31, 23, 59, 59.999, "+0000"),  parse("2014").last

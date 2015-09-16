@@ -2,9 +2,9 @@
 
 # DatePeriodParser
 
-Parse a date-like string and returns it's start and end DateTime.
+Parse a date-period string like 2015-Q1 and returns the start and end DateTime.
 
-This can be used to pass date-periods for URL parameters or query strings, e.g. filtering records in a given period.
+Useful for reports to filterin records for a given time period.
 
 ```ruby
 # Example useage in a rails controller
@@ -12,10 +12,7 @@ This can be used to pass date-periods for URL parameters or query strings, e.g. 
 class PostsController
   # GET /posts?period=2015-08
   def index
-    date_range = DatePeriodParser.range(params["period"])
-    # with user specific timezones
-    # date_range = DatePeriodParser.range(params["period"], offset: current_user.timezone)
-    date_range ||= DatePeriodParser.range("current-month") # default
+    date_range = DatePeriodParser.range(params["period"], default: "this-month")
     @posts = Posts.where(created_at: date_range)
   end
 end
@@ -117,6 +114,10 @@ until ||= DateTime.now
 # parse! raises ArgumentError for invalid periods
 from,until = DatePeriodParser.parse!("123213")
 #=> ArgumentError
+
+# use :default option when period is optional
+DatePeriodParser.parse(nil, default: "2014")
+DatePeriodParser.parse("", default: "2014")
 ```
 
 ### DatePeriodParser.range

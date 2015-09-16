@@ -27,6 +27,7 @@ module DatePeriodParser
   #
   # @param  [String] period date period string.
   # @option options [String] :offset ("+0000") timezone offset, e.g. "+0700"
+  # @option options [String] :default (nil) use this default if `period` is nil
   # @return [Array<DateTime, DateTime>] start and end DateTime
   # @return [nil] if period string is invalid
   #
@@ -49,9 +50,11 @@ module DatePeriodParser
   # @param  [String] period date period string.
   # @raise [ArgumentError] if period string is invalid
   # @option options [String] :offset ("+0000") timezone offset, e.g. "+0700"
+  # @option options [String] :default (nil) use this default if `period` is nil
   # @return [Array<DateTime, DateTime>] start and end DateTime
   #
   def parse!(period, options = {})
+    period = options[:default] if period.nil? || period.empty?
     Base.new(period, options).parse
   end
 
@@ -65,6 +68,7 @@ module DatePeriodParser
   # @param  [String] period date period string.
   # @raise [ArgumentError] if period string is invalid
   # @option options [String] :offset ("+0000") timezone offset, e.g. "+0700"
+  # @option options [String] :default (nil) use this default if `period` is nil
   # @return [Range<DateTime, DateTime>] start and end DateTime as range
   #
   def range(period, options = {})
@@ -86,9 +90,11 @@ module DatePeriodParser
   # @param  [String] period date period string.
   # @raise [ArgumentError] if period string is invalid
   # @option options [String] :offset ("+0000") timezone offset, e.g. "+0700"
+  # @option options [String] :default (nil) use this default if `period` is nil
   # @return [Range<DateTime, DateTime>] start and end DateTime as range
   #
   def range!(period, options = {})
+    period = options[:default] if period.nil? || period.empty?
     first,last = Base.new(period, offset).parse
     first..last
   end
