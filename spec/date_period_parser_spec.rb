@@ -7,6 +7,14 @@ describe DatePeriodParser do
     DatePeriodParser.parse(str, opts)
   end
 
+  def range(str, opts = {})
+    DatePeriodParser.range(str, opts)
+  end
+
+  it "range" do
+    range("today")
+  end
+
   it 'parse' do
     assert parse(:today) != nil
     assert_equal DateTime.new(2014, 1, 1,  0,  0,  0.000, "+0000"),  parse("2014").first

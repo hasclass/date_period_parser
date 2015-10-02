@@ -95,7 +95,7 @@ module DatePeriodParser
   #
   def range!(period, options = {})
     period = options[:default] if period.nil? || period.empty?
-    first,last = Base.new(period, offset).parse
+    first,last = Base.new(period, options).parse
     first..last
   end
 
